@@ -346,42 +346,34 @@ pre .chunk {
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
 <li><a href="#preface">Preface</a><ul>
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#setup">Setting up your computer</a></li>
-</ul>
-</li>
-<li><a href="#busybox">1.0 Playing with Busybox</a><ul>
+<li><a href="#prerequisites">Prerequisites</a>
+   -<a href="#setup">Setting up your computer</a>
+   -<a href="#busybox">1.0 Playing with Busybox</a></li>
 <li><a href="#dockerrun">1.1 Docker Run</a></li>
-<li><a href="#terminology">1.2 Terminology</a></li>
-</ul>
-</li>
-<li><a href="#webapps">2.0 Webapps with Docker</a><ul>
+<li><a href="#terminology">1.2 Terminology</a>
+   -<a href="#webapps">2.0 Webapps with Docker</a></li>
 <li><a href="#static-site">2.1 Static Sites</a></li>
 <li><a href="#docker-images">2.2 Docker Images</a></li>
 <li><a href="#our-image">2.3 Our First Image</a></li>
 <li><a href="#dockerfiles">2.4 Dockerfile</a></li>
-<li><a href="#docker-aws">2.5 Docker on AWS</a></li>
-</ul>
-</li>
-<li><a href="#multi-container">3.0 Multi-container Environments</a><ul>
+<li><a href="#docker-aws">2.5 Docker on AWS</a>
+   -<a href="#multi-container">3.0 Multi-container Environments</a></li>
 <li><a href="#foodtrucks">3.1 SF Food Trucks</a></li>
 <li><a href="#docker-network">3.2 Docker Network</a></li>
 <li><a href="#docker-compose">3.3 Docker Compose</a></li>
-<li><a href="#aws-ecs">3.4 AWS Elastic Container Service</a></li>
-</ul>
-</li>
-<li><a href="#wrap-up">4.0 Wrap Up</a><ul>
+<li><a href="#aws-ecs">3.4 AWS Elastic Container Service</a>
+   -<a href="#wrap-up">4.0 Wrap Up</a></li>
 <li><a href="#next-steps">4.1 What Next?</a></li>
-<li><a href="#feedback">4.2 Give Feedback</a></li>
+<li><a href="#feedback">4.2 Give Feedback</a>
+   -<a href="#references">References</a></li>
 </ul>
 </li>
-<li><a href="#references">References</a></li>
 </ul>
 <hr />
 <p><a href="#table-of-contents" class="top" id="preface">Top</a></p>
 <h2 id="preface">Preface</h2>
 <blockquote>
-<p>Note: This tutorial uses version <strong>1.9.1</strong> of Docker. If you find any part of the tutorial incompatible with a future version, please raise an <a href="https://github.com/prakhar1989/docker-curriculum/issues">issue</a>. Thanks!</p>
+<p>Note: This tutorial uses version <strong>1.12.0-rc2</strong> of Docker. If you find any part of the tutorial incompatible with a future version, please raise an <a href="https://github.com/prakhar1989/docker-curriculum/issues">issue</a>. Thanks!</p>
 </blockquote>
 <p><a id="prerequisites"></a></p>
 <h3 id="prerequisites">Prerequisites</h3>
@@ -392,9 +384,8 @@ pre .chunk {
 </ul>
 <p><a id="setup"></a></p>
 <h3 id="setting-up-your-computer">Setting up your computer</h3>
-<p>Getting all the tooling setup on your computer can be a daunting task, but thankfully as Docker has become stable, getting Docker up and running on your favorite OS has become very easy. First, we'll install Docker.</p>
-<h5 id="docker">Docker</h5>
-<p>Until a few releases ago, running Docker on OSX and Windows was quite a hassle. Lately however, Docker has invested significantly into improving the on-boarding experience for its users on these OSes, thus running Docker now is a cakewalk. The <em>getting started</em> guide on Docker has detailed instructions for setting up Docker on <a href="http://docs.docker.com/mac/step_one/">Mac</a>, <a href="http://docs.docker.com/linux/step_one/">Linux</a> and <a href="http://docs.docker.com/windows/step_one/">Windows</a>.</p>
+<p>Getting all the tooling setup on your computer can be a daunting task, but thankfully as Docker has become stable, getting Docker up and running on your favorite OS has become very easy. </p>
+<p>Until a few releases ago, running Docker on OSX and Windows was quite a hassle. Lately however, Docker has invested significantly into improving the on-boarding experience for its users on these OSes, thus running Docker now is a cakewalk. The <em>getting started</em> guide on Docker has detailed instructions for setting up Docker on <a href="https://www.docker.com/products/docker#/mac">Mac</a>, <a href="https://www.docker.com/products/docker#/linux">Linux</a> and <a href="https://www.docker.com/products/docker#/windows">Windows</a>.</p>
 <p>Once you are done installing Docker, test your Docker installation by running the following:</p>
 <pre><code>$ docker run hello-world
 
@@ -403,32 +394,11 @@ This message shows that your installation appears to be working correctly.
 ...
 </code></pre>
 
-<h5 id="python">Python</h5>
-<p>Python comes pre-installed on OSX and (most) Linux distributions. If you need to install Python, you can download the installer <a href="https://www.python.org/downloads/">here</a>.</p>
-<p>To check if you have Python (and which version), run this command in the terminal:</p>
-<pre><code>$ python --version
-Python 2.7.11
-</code></pre>
-
-<p>We'll also be using <a href="https://pip.readthedocs.org/en/stable/">pip</a> to install packages for our application. If don't have pip installed, please <a href="http://pip.readthedocs.org/en/stable/installing/">download</a> it for your system.</p>
-<p>To check if you have pip installed, run this command in the terminal:</p>
-<pre><code>$ pip --version
-pip 7.1.2 from /Library/Python/2.7/site-packages/pip-7.1.2-py2.7.egg (python 2.7)
-</code></pre>
-
-<h5 id="java-optional">Java (optional)</h5>
-<p>The app that we'll be developing will be using <a href="https://www.elastic.co/">Elasticsearch</a> for storage and search. In order to run elasticsearch locally, make sure you have Java installed. The tutorial will run everything inside a container so having Java locally is not strictly required. If Java is installed, typing <code>java -version</code> in your terminal should give you an output similar to the one below.</p>
-<pre><code>$ java -version
-java version &quot;1.8.0_60&quot;
-Java(TM) SE Runtime Environment (build 1.8.0_60-b27)
-Java HotSpot(TM) 64-Bit Server VM (build 25.60-b23, mixed mode)
-</code></pre>
-
 <hr />
 <p><a href="#table-of-contents" class="top" id="preface">Top</a>
 <a id="busybox"></a></p>
 <h2 id="10-playing-with-busybox">1.0 Playing with Busybox</h2>
-<p>Now that we have everything setup, it's time to get our hands dirty. In this section, we are going to run a <a href="https://en.wikipedia.org/wiki/BusyBox">Busybox</a> container (a lightweight linux distribution) on our system and get a taste of the <code>docker run</code> command.</p>
+<p>Now that we have everything setup, it's time to get our hands dirty. In this section, we are going to run a <a href="https://en.wikipedia.org/wiki/BusyBox">Busybox</a> container on our system and get a taste of the <code>docker run</code> command.</p>
 <p>To get started, let's run the following in our terminal:</p>
 <pre><code>$ docker pull busybox
 </code></pre>
@@ -477,9 +447,21 @@ bin   dev   etc   home  proc  root  sys   tmp   usr   var
 
 <p>Running the <code>run</code> command with the <code>-it</code> flags attaches us to an interactive tty in the container. Now we can run as many commands in the container as we want. Take some time to run your favorite commands.</p>
 <blockquote>
-<p><strong>Danger Zone</strong>: If you're feeling particularly adventurous you can try <code>rm -rf bin</code> in the container. Make sure you run this command in the container and <strong>not</strong> in your laptop. Doing this will not make any other commands like <code>ls</code>, <code>echo</code> work. Once everything stops working, you can exit the container and then start it up again with the <code>docker run -it busybox sh</code> command. Since Docker creates a new container every time, everything should start working again.</p>
+<p><strong>Danger Zone</strong>: If you're feeling particularly adventurous you can try <code>rm -rf bin</code> in the container. Make sure you run this command in the container and <strong>not</strong> in your laptop. Doing this will not make any other commands like <code>ls</code>, <code>echo</code> work. Once everything stops working, you can exit the container (type <code>exit</code> and press Enter) and then start it up again with the <code>docker run -it busybox sh</code> command. Since Docker creates a new container every time, everything should start working again.</p>
 </blockquote>
 <p>That concludes a whirlwind tour of the mighty <code>docker run</code> command, which would most likely be the command you'll use most often. It makes sense to spend some time getting comfortable with it. To find out more about <code>run</code>, use <code>docker run --help</code> to see a list of all flags it supports. As we proceed further, we'll see a few more variants of <code>docker run</code>.</p>
+<p>Before we move ahead though, let's quickly talk about deleting containers. We saw above that we can still see remnants of the container even after we've exited by running <code>docker ps -a</code>. Throughout this tutorial, you'll run <code>docker run</code> multiple times and leaving stray containers will eat up disk space. Hence, as a rule of thumb, I clean up containers once I'm done with them. To do that, you can run the <code>docker rm</code> command. Just copy the container IDs from above and paste them alongside the command.</p>
+<pre><code>$ docker rm 305297d7a235 ff0a5c3750b9
+305297d7a235
+ff0a5c3750b9
+</code></pre>
+
+<p>On deletion, you should see the IDs echoed back to you. If you have a bunch of containers to delete in one go, copy-pasting IDs can be tedious. In that case, you can simply run -</p>
+<pre><code>$ docker rm $(docker ps -a -q -f status=exited)
+</code></pre>
+
+<p>This command deletes all containers that have a status of <code>exited</code>. In case you're wondering, the <code>-q</code> flag, only returns the numeric IDs and <code>-f</code> filters output based on conditions provided. One last thing that'll be useful is the <code>--rm</code> flag that can be passed to <code>docker run</code> which automatically deletes the container once it's exited from. For one off docker runs, <code>--rm</code> flag is very useful.</p>
+<p>Lastly, you can also delete images that you no longer need by running <code>docker rmi</code>.</p>
 <p><a id="terminology"></a></p>
 <h3 id="12-terminology">1.2 Terminology</h3>
 <p>In the last section, we used a lot of Docker-specific jargon which might be confusing to some. So before we go further, let me clarify some terminology that is used frequently in the Docker ecosystem.</p>
@@ -509,26 +491,25 @@ e61d12292d69556eabe2a44c16cbd54486b2527e2ce4f95438e504afb7b02810
 
 <p>In the above command, <code>-d</code> will detach our terminal, <code>-P</code> will publish all exposed ports to random ports and finally <code>--name</code> corresponds to a name we want to give. Now we can see the ports by running the <code>docker port [CONTAINER]</code> command</p>
 <pre><code>$ docker port static-site
-443/tcp -&gt; 0.0.0.0:32772
-80/tcp -&gt; 0.0.0.0:32773
+80/tcp -&gt; 0.0.0.0:32769
+443/tcp -&gt; 0.0.0.0:32768
 </code></pre>
 
-<p>If you're on Linux, you can open <a href="http://localhost:32772">http://localhost:32772</a> in your browser. If you're on Windows or a Mac, you need to find the IP of the hostname.</p>
-<pre><code>$ docker-machine ip default
-192.168.99.100
-</code></pre>
-
-<p>You can now open <a href="http://192.168.99.100:32772">http://192.168.99.100:32772</a> to see your site live! You can also specify a custom port to which the client will forward connections to the container.</p>
+<p>You can open <a href="http://localhost:32769">http://localhost:32769</a> in your browser. </p>
+<blockquote>
+<p>Note: If you're using docker-toolbox, then you might need to use <code>docker-machine ip default</code> to get the IP. </p>
+</blockquote>
+<p>You can also specify a custom port to which the client will forward connections to the container. </p>
 <pre><code>$ docker run -p 8888:80 prakhar1989/static-site
 Nginx is running...
 </code></pre>
 
 <p><img src="https://raw.githubusercontent.com/prakhar1989/docker-curriculum/master/images/static.png" title="static"></p>
-<p>I'm sure you agree that was super simple. To deploy this on a real server you would just need to install Docker, and run the above Docker command.</p>
-<p>Now that you've seen how to run a webserver inside a Docker image, you must be wondering - how do I create my own Docker image? This is the question we'll be exploring in the next section.</p>
+<p>To stop a detached container, run <code>docker stop</code> by giving the container ID. </p>
+<p>I'm sure you agree that was super simple. To deploy this on a real server you would just need to install Docker, and run the above Docker command. Now that you've seen how to run a webserver inside a Docker image, you must be wondering - how do I create my own Docker image? This is the question we'll be exploring in the next section.</p>
 <p><a id="docker-images"></a></p>
 <h3 id="22-docker-images">2.2 Docker Images</h3>
-<p>We've looked at images before but in this section we'll dive deeper into what Docker images are and build our own image! Lastly, we'll also use that image to run our application locally and finally deploy on <a href="http://aws.amazon.com">AWS</a> to share it with our friends! Excited? Great! Let's get started.</p>
+<p>We've looked at images before, but in this section we'll dive deeper into what Docker images are and build our own image! Lastly, we'll also use that image to run our application locally and finally deploy on <a href="http://aws.amazon.com">AWS</a> to share it with our friends! Excited? Great! Let's get started.</p>
 <p>Docker images are the basis of containers. In the previous example, we <strong>pulled</strong> the <em>Busybox</em> image from the registry and asked the Docker client to run a container <strong>based</strong> on that image. To see the list of images that are available locally, use the <code>docker images</code> command.</p>
 <pre><code>$ docker images
 REPOSITORY                      TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
@@ -550,7 +531,7 @@ hello-world                     latest              0a6ba66e537a        11 weeks
 <p>An important distinction to be aware of when it comes to images is the difference between base and child images.</p>
 <ul>
 <li>
-<p><strong>Base images</strong> are images that has no parent image, usually images with an OS like ubuntu, busybox or debian.</p>
+<p><strong>Base images</strong> are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</p>
 </li>
 <li>
 <p><strong>Child images</strong> are images that build on base images and add additional functionality.</p>
@@ -568,18 +549,7 @@ hello-world                     latest              0a6ba66e537a        11 weeks
 <p><a id="our-image"></a></p>
 <h3 id="23-our-first-image">2.3 Our First Image</h3>
 <p>Now that we have a better understanding of images, it's time to create our own. Our goal in this section will be to create an image that sandboxes a simple <a href="http://flask.pocoo.org">Flask</a> application. For the purposes of this workshop, I've already created a fun little <a href="https://github.com/prakhar1989/docker-curriculum/tree/master/flask-app">Flask app</a> that displays a random cat <code>.gif</code> every time it is loaded - because you know, who doesn't like cats? If you haven't already, please go ahead and clone the repository locally.</p>
-<p>Before we get started on creating the image, let's first test that the application works correctly locally. Step one is to <code>cd</code> into the <code>flask-app</code> directory and install the dependencies</p>
-<pre><code>$ cd flask-app
-$ pip install -r requirements.txt
-$ python app.py
- * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-</code></pre>
-
-<p>If all goes well, you should see the output as above. Head over to <a href="http://localhost:5000">http://localhost:5000</a> to see the app in action.</p>
-<blockquote>
-<p>Note: If <code>pip install</code> is giving you permission denied errors, you might need to try running the command as <code>sudo</code>. If you prefer not installing packages system-wide, you can instead try <code>pip install --user -r requirements.txt</code>.</p>
-</blockquote>
-<p>Looks great doesn't it? The next step now is to create an image with this web app. As mentioned above, all user images are based off of a base image. Since our application is written in Python, the base image we're going to use will be <a href="https://hub.docker.com/_/python/">Python 3</a>. More specifically, we are going to use the <code>python:3-onbuild</code> version of the python image.</p>
+<p>The next step now is to create an image with this web app. As mentioned above, all user images are based off of a base image. Since our application is written in Python, the base image we're going to use will be <a href="https://hub.docker.com/_/python/">Python 3</a>. More specifically, we are going to use the <code>python:3-onbuild</code> version of the python image.</p>
 <p>What's the <code>onbuild</code> version you might ask?</p>
 <blockquote>
 <p>These images include multiple ONBUILD triggers, which should be all you need to bootstrap most applications. The build will COPY a <code>requirements.txt</code> file, RUN <code>pip install</code> on said file, and then copy the current directory into <code>/usr/src/app</code>.</p>
@@ -613,7 +583,7 @@ CMD [&quot;python&quot;, &quot;./app.py&quot;]
 </code></pre>
 
 <p>Now that we have our <code>Dockerfile</code>, we can build our image. The <code>docker build</code> command does the heavy-lifting of creating a Docker image from a <code>Dockerfile</code>.</p>
-<p>The section below shows you the output of running the same. Before you run the command yourself (don't forget the period), make sure to replace my username with yours. This username should be the same on you created when you registered on <a href="https://hub.docker.com">Docker hub</a>. If you haven't done that yet, please go ahead and create an account. The <code>docker build</code> command is quite simple - it takes an optional tag name with <code>-t</code> and a location of the directory containing the <code>Dockerfile</code>.</p>
+<p>The section below shows you the output of running the same. Before you run the command yourself (don't forget the period), make sure to replace my username with yours. This username should be the same one you created when you registered on <a href="https://hub.docker.com">Docker hub</a>. If you haven't done that yet, please go ahead and create an account. The <code>docker build</code> command is quite simple - it takes an optional tag name with <code>-t</code> and a location of the directory containing the <code>Dockerfile</code>.</p>
 <pre><code>$ docker build -t prakhar1989/catnip .
 Sending build context to Docker daemon 8.704 kB
 Step 1 : FROM python:3-onbuild
@@ -636,20 +606,20 @@ Removing intermediate container f01401a5ace9
 Successfully built 13e87ed1fbc2
 </code></pre>
 
-<p>If you don't have the <code>python-3:onbuild</code> image, the client will first pull the image and then create your image. Hence, your output on running the command will look different from mine. Look carefully and you'll notice that the on-build triggers were executed correctly. If everything went well, your image should be ready! Run <code>docker images</code> and see if your image shows.</p>
+<p>If you don't have the <code>python:3-onbuild</code> image, the client will first pull the image and then create your image. Hence, your output from running the command will look different from mine. Look carefully and you'll notice that the on-build triggers were executed correctly. If everything went well, your image should be ready! Run <code>docker images</code> and see if your image shows.</p>
 <p>The last step in this section is to run the image and see if it actually works (replacing my username with yours).</p>
 <pre><code>$ docker run -p 8888:5000 prakhar1989/catnip
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 </code></pre>
 
-<p>Head over to the URL specified, where your app should be live.</p>
+<p>The command we just ran used port 5000 for the server inside the container, and exposed this externally on port 8888. Head over to the URL with port 8888, where your app should be live.</p>
 <p><img src="https://raw.githubusercontent.com/prakhar1989/docker-curriculum/master/images/catgif.png" title="static"></p>
 <p>Congratulations! You have successfully created your first docker image.</p>
 <p><a id="docker-aws"></a></p>
 <h3 id="25-docker-on-aws">2.5 Docker on AWS</h3>
-<p>What good is an application that can't be shared with friends, right? So in this section we are going to see how we can deploy our awesome application on the cloud so that we can share it with our friends! We're going to use AWS <a href="https://aws.amazon.com/elasticbeanstalk/">Elastic Beanstalk</a> to get our application up and running in a few clicks. We'll also see how easy it is to make our application scalable and manageable with Beanstalk!</p>
+<p>What good is an application that can't be shared with friends, right? So in this section we are going to see how we can deploy our awesome application to the cloud so that we can share it with our friends! We're going to use AWS <a href="https://aws.amazon.com/elasticbeanstalk/">Elastic Beanstalk</a> to get our application up and running in a few clicks. We'll also see how easy it is to make our application scalable and manageable with Beanstalk!</p>
 <h5 id="docker-push">Docker push</h5>
-<p>The first thing that we need to do before we deploy our app on AWS is to publish our image on a registry which can be accessed by AWS. There are many different <a href="https://aws.amazon.com/ecr/">Docker registries</a> you can use (you can even host <a href="https://docs.docker.com/registry/deploying/">your own</a>). For now, let's use <a href="https://hub.docker.com">Docker Hub</a> to publish the image. To publish, just type</p>
+<p>The first thing that we need to do before we deploy our app to AWS is to publish our image on a registry which can be accessed by AWS. There are many different <a href="https://aws.amazon.com/ecr/">Docker registries</a> you can use (you can even host <a href="https://docs.docker.com/registry/deploying/">your own</a>). For now, let's use <a href="https://hub.docker.com">Docker Hub</a> to publish the image. To publish, just type</p>
 <pre><code>$ docker push prakhar1989/catnip
 </code></pre>
 
@@ -663,7 +633,7 @@ Login Succeeded
 <p>Remember to replace the name of the image tag above with yours. It is important to have the format of <code>username/image_name</code> so that the client knows where to publish.</p>
 <p>Once that is done, you can view your image on Docker Hub. For example, here's the <a href="https://hub.docker.com/r/prakhar1989/catnip/">web page</a> for my image.</p>
 <blockquote>
-<p>Note: One thing that I'd like to clarify before we go ahead is that it is not <strong>imperative</strong> to host your image on a public registry (or any registry) in order to deploy on AWS. In case you're writing code for the next million-dollar unicorn startup you can totally skip this step. The reason why we're pushing our images publicly is that it makes deployment super simple by skipping a few intermediate configuration steps.</p>
+<p>Note: One thing that I'd like to clarify before we go ahead is that it is not <strong>imperative</strong> to host your image on a public registry (or any registry) in order to deploy to AWS. In case you're writing code for the next million-dollar unicorn startup you can totally skip this step. The reason why we're pushing our images publicly is that it makes deployment super simple by skipping a few intermediate configuration steps.</p>
 </blockquote>
 <p>Now that your image is online, anyone who has docker installed can play with your app by typing just a single command.</p>
 <pre><code>$ docker run -p 8888:5000 prakhar1989/catnip
@@ -671,7 +641,7 @@ Login Succeeded
 
 <p>If you've pulled your hair in setting up local dev environments / sharing application configuration in the past, you very well know how awesome this sounds. That's why Docker is so cool!</p>
 <h5 id="beanstalk">Beanstalk</h5>
-<p>AWS Elastic Beanstalk (EB) is a PaaS (Platform as a Service) offered by AWS. If you've used Heroku, Google App Engine etc. you'll feel right at home. As a developer, you just tell EB how to run your app and it takes care of the rest - including scaling, monitoring and even updates. In April 2014, EB added in support for running single-container Docker deployments which is what we'll use to deploy our app. Although EB has a very intuitive <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html">CLI</a>, it does require some setup, and to keep things simple we'll use the web UI to launch our application.</p>
+<p>AWS Elastic Beanstalk (EB) is a PaaS (Platform as a Service) offered by AWS. If you've used Heroku, Google App Engine etc. you'll feel right at home. As a developer, you just tell EB how to run your app and it takes care of the rest - including scaling, monitoring and even updates. In April 2014, EB added support for running single-container Docker deployments which is what we'll use to deploy our app. Although EB has a very intuitive <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html">CLI</a>, it does require some setup, and to keep things simple we'll use the web UI to launch our application.</p>
 <p>To follow along, you need a functioning <a href="http://aws.amazon.com">AWS</a> account. If you haven't already, please go ahead and do that now - you will need to enter your credit card information. But don't worry, it's free and anything we do in this tutorial will also be free! Let's get started.</p>
 <p>Here are the steps:</p>
 <ul>
@@ -720,7 +690,7 @@ Login Succeeded
 <a id="multi-container"></a></p>
 <h2 id="30-multi-container-environments">3.0 Multi-container Environments</h2>
 <p>In the last section, we saw how easy and fun it is to run applications with Docker. We started with a simple static website and then tried a Flask app. Both of which we could run locally and in the cloud with just a few commands. One thing both these apps had in common was that they were running in a <strong>single container</strong>.</p>
-<p>Those of you who have experience running services in production know that usually apps nowadays are not that simple. There's almost always a database (or any other kind of persistent storage) involved. Systems such as <a href="http://redis.io/">Redis</a> and <a href="http://memcached.org/">Memcached</a> have become <em>de riguer</em> of most web application architectures. Hence, in this section we going to spend some time learning how to Dockerize applications which rely on different services to run.</p>
+<p>Those of you who have experience running services in production know that usually apps nowadays are not that simple. There's almost always a database (or any other kind of persistent storage) involved. Systems such as <a href="http://redis.io/">Redis</a> and <a href="http://memcached.org/">Memcached</a> have become <em>de riguer</em> of most web application architectures. Hence, in this section we are going to spend some time learning how to Dockerize applications which rely on different services to run.</p>
 <p>In particular, we are going to see how we can run and manage <strong>multi-container</strong> docker environments. Why multi-container you might ask? Well, one of the key points of Docker is the way it provides isolation. The idea of bundling a process with its dependencies in a sandbox (called containers) is what makes this so powerful.</p>
 <p>Just like it's a good strategy to decouple your application tiers, it is wise to keep containers for each of the <strong>services</strong> separate. Each tier is likely to have different resource needs and those needs might grow at different rates. By separating the tiers into different containers, we can compose each tier using the most appropriate instance type based on different resource needs. This also plays in very well with the whole <a href="http://martinfowler.com/articles/microservices.html">microservices</a> movement which is one of the main reasons why Docker (or any other container technology) is at the <a href="https://medium.com/aws-activate-startup-blog/using-containers-to-build-a-microservices-architecture-6e1b8bacb7d1#.xl3wryr5z">forefront</a> of modern microservices architectures.</p>
 <p><a id="foodtrucks"></a></p>
@@ -744,10 +714,7 @@ monsantoco/elasticsearch          ElasticSearch Docker image                    
 <pre><code>$ docker run -dp 9200:9200 elasticsearch
 d582e031a005f41eea704cdc6b21e62e7a8a42021297ce7ce123b945ae3d3763
 
-$ docker-machine ip default
-192.168.99.100
-
-$ curl 192.168.99.100:9200
+$ curl 0.0.0.0:9200
 {
   &quot;name&quot; : &quot;Ultra-Marine&quot;,
   &quot;cluster_name&quot; : &quot;elasticsearch&quot;,
@@ -762,6 +729,11 @@ $ curl 192.168.99.100:9200
 }
 </code></pre>
 
+<p>Note that if you are using Elasticsearch version 5 or higher you need to do the following to make it work.</p>
+<ol>
+<li>Increase the memory size of your docker-machine instance to at least 2gb.</li>
+<li>Do an SSH in your docker-machine instance by <code>docker-machine ssh</code> and run this command <code>sysctl -w vm.max_map_count=262144</code>. This will fix the max virtual memory areas error.</li>
+</ol>
 <p>While we are at it, let's get our Flask container running too. But before we get to that, we need a <code>Dockerfile</code>. In the last section, we used <code>python:3-onbuild</code> image as our base image. This time, however, apart from installing Python dependencies via <code>pip</code>, we want our application to also generate our <a href="http://sf-foodtrucks.xyz/static/build/main.js">minified Javascript file</a> for production. For this, we'll require Nodejs. Since we need a custom build step, we'll start from the <code>ubuntu</code> base image to build our <code>Dockerfile</code> from scratch.</p>
 <blockquote>
 <p>Note: if you find that an existing image doesn't cater to your needs, feel free to start from another base image and tweak it yourself. For most of the images on Docker Hub, you should be able to find the corresponding <code>Dockerfile</code> on Github. Reading through existing Dockerfiles is one of the best ways to learn how to roll your own.</p>
@@ -794,7 +766,7 @@ CMD [ &quot;python&quot;, &quot;./app.py&quot; ]
 </code></pre>
 
 <p>Quite a few new things here so let's quickly go over this file. We start off with the <a href="https://wiki.ubuntu.com/LTS">Ubuntu LTS</a> base image and use the package manager <code>apt-get</code> to install the dependencies namely - Python and Node. The <code>yqq</code> flag is used to suppress output and assumes "Yes" to all prompt. We also create a symbolic link for the node binary to deal with backward compatibility issues.</p>
-<p>We then use the <code>ADD</code> command to copy our application into a new volume in the container - <code>/opt/flask-app</code>. This is where our code will reside. We also set this as our working directory, so that the following commands running in the context of this location. Now that our system-wide dependencies are installed, we get around to install app-specific ones. First off we tackle Node by installing the packages from npm and running the build command as defined in our <code>package.json</code> <a href="https://github.com/prakhar1989/FoodTrucks/blob/master/flask-app/package.json#L7-L9">file</a>. We finish the file off by installing the Python packages, exposing the port and defining the <code>CMD</code> to run as we did in the last section.</p>
+<p>We then use the <code>ADD</code> command to copy our application into a new volume in the container - <code>/opt/flask-app</code>. This is where our code will reside. We also set this as our working directory, so that the following commands will be run in the context of this location. Now that our system-wide dependencies are installed, we get around to install app-specific ones. First off we tackle Node by installing the packages from npm and running the build command as defined in our <code>package.json</code> <a href="https://github.com/prakhar1989/FoodTrucks/blob/master/flask-app/package.json#L7-L9">file</a>. We finish the file off by installing the Python packages, exposing the port and defining the <code>CMD</code> to run as we did in the last section.</p>
 <p>Finally, we can go ahead, build the image and run the container (replace <code>prakhar1989</code> with your username below).</p>
 <pre><code>$ docker build -t prakhar1989/foodtrucks-web .
 </code></pre>
@@ -910,7 +882,7 @@ NETWORK ID          NAME                DRIVER
 be0f7178486c        host                host
 </code></pre>
 
-<p>The <code>network create</code> command creates a new <em>bridge</em> network, which is what we need at the moment. There are other <a href="https://docs.docker.com/engine/userguide/networking/dockernetworks/">kinds</a> of networks that you can create, and you are encouraged to read about them in the official docs.</p>
+<p>The <code>network create</code> command creates a new <em>bridge</em> network, which is what we need at the moment. There are other kinds of networks that you can create, and you are encouraged to read about them in the official <a href="https://docs.docker.com/engine/userguide/networking/dockernetworks/">docs</a>.</p>
 <p>Now that we have a network, we can launch our containers inside this network using the <code>--net</code> flag. Let's do that - but first, we will stop our ES container that is running in the bridge (default) network.</p>
 <pre><code>$ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                              NAMES
@@ -948,7 +920,7 @@ $ docker network inspect foodtrucks
 ]
 </code></pre>
 
-<p>We've done the same thing as did earlier but this time we gave our ES container a name <code>es</code>. Now before we try to run our flask container, let's inspect what happens when we launch in a network.</p>
+<p>We've done the same thing as earlier but this time we gave our ES container a name <code>es</code>. Now before we try to run our flask container, let's inspect what happens when we launch in a network.</p>
 <pre><code class="javascript">$ docker run -it --rm --net foodtrucks prakhar1989/foodtrucks-web bash
 root@53af252b771a:/opt/flask-app# cat /etc/hosts
 172.18.0.3  53af252b771a
@@ -996,10 +968,7 @@ CONTAINER ID        IMAGE                        COMMAND                  CREATE
 2a1b77e066e6        prakhar1989/foodtrucks-web   &quot;python ./app.py&quot;        2 seconds ago       Up 1 seconds        0.0.0.0:5000-&gt;5000/tcp             foodtrucks-web
 2c0b96f9b803        elasticsearch                &quot;/docker-entrypoint.s&quot;   21 minutes ago      Up 21 minutes       0.0.0.0:9200-&gt;9200/tcp, 9300/tcp   es
 
-$ docker-machine ip default
-192.168.99.100
-
-$ curl -I 192.168.99.100:5000
+$ curl -I 0.0.0.0:5000
 HTTP/1.0 200 OK
 Content-Type: text/html; charset=utf-8
 Content-Length: 3697
@@ -1007,7 +976,7 @@ Server: Werkzeug/0.11.2 Python/2.7.6
 Date: Sun, 10 Jan 2016 23:58:53 GMT
 </code></pre>
 
-<p>Head over to <a href="http://192.168.99.100:5000">http://192.168.99.100:5000</a> and see your glorious app live! Although that might have seemed like a lot of work, we actually just typed 4 commands to go from zero to running. I've collated the commands in a <a href="https://github.com/prakhar1989/FoodTrucks/blob/master/setup-docker.sh">bash script</a>.</p>
+<p>Head over to <a href="http://0.0.0.0:5000">http://0.0.0.0:5000</a> and see your glorious app live! Although that might have seemed like a lot of work, we actually just typed 4 commands to go from zero to running. I've collated the commands in a <a href="https://github.com/prakhar1989/FoodTrucks/blob/master/setup-docker.sh">bash script</a>.</p>
 <pre><code>#!/bin/bash
 
 # build the flask container
@@ -1032,10 +1001,10 @@ $ ./setup-docker.sh
 <p>And that's it! If you ask me, I find this to be an extremely awesome, and a powerful way of sharing and running your applications!</p>
 <p><a id="docker-links"></a></p>
 <h5 id="docker-links">Docker Links</h5>
-<p>Before we leave this section though, I should mention that <code>docker network</code> is a relatively new feature - it was a part of Docker 1.9 <a href="https://blog.docker.com/2015/11/docker-1-9-production-ready-swarm-multi-host-networking/">release</a>. Before <code>network</code> came along, links were the accepted way of getting containers to talk to each other. According to the official <a href="https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/">docs</a>, linking is expected to be deprecated in future releases. In case you stumble across tutorials or blog posts that use <code>link</code> to bridge containers, remember to use <code>network</code> instead.</p>
+<p>Before we leave this section though, I should mention that <code>docker network</code> is a relatively new feature - it was part of Docker 1.9 <a href="https://blog.docker.com/2015/11/docker-1-9-production-ready-swarm-multi-host-networking/">release</a>. Before <code>network</code> came along, links were the accepted way of getting containers to talk to each other. According to the official <a href="https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/">docs</a>, linking is expected to be deprecated in future releases. In case you stumble across tutorials or blog posts that use <code>link</code> to bridge containers, remember to use <code>network</code> instead.</p>
 <p><a id="docker-compose"></a></p>
 <h3 id="33-docker-compose">3.3 Docker Compose</h3>
-<p>Till now we've spent all our time in exploring the Docker client. In the Docker ecosystem, however, there are a bunch of other open-source tools which play very nicely with Docker. A few of them are -</p>
+<p>Till now we've spent all our time exploring the Docker client. In the Docker ecosystem, however, there are a bunch of other open-source tools which play very nicely with Docker. A few of them are -</p>
 <ol>
 <li><a href="https://docs.docker.com/machine/">Docker Machine</a> - Create Docker hosts on your computer, on cloud providers, and inside your own data center</li>
 <li><a href="https://docs.docker.com/compose/">Docker Compose</a> - A tool for defining and running multi-container Docker applications.</li>
@@ -1194,10 +1163,10 @@ rtt min/avg/max/mdev = 0.049/0.056/0.064/0.010 ms
 </code></pre>
 
 <p>Voila! That works. So somehow, this container is magically able to ping <code>es</code> hostname.  It turns out that in Docker 1.10 a new networking system was added that does service discovery using a DNS server. If you're interested, you can read more about the <a href="https://github.com/docker/libnetwork/issues/767">proposal</a> and <a href="https://blog.docker.com/2016/02/docker-1-10/">release notes</a>.</p>
-<p>That concludes our tour of Docker Compose. With Docker Compose, you can also pause your services, run a one-off command on a container and even scale the number of containers. I also recommend you to checkout a few other <a href="https://docs.docker.com/compose/overview/#common-use-cases">use-cases</a> of Docker compose. Hopefully I was able to show you how easy it is to manage multi-container environments with Compose. In the final section, we are going to deploy our app to AWS!</p>
+<p>That concludes our tour of Docker Compose. With Docker Compose, you can also pause your services, run a one-off command on a container and even scale the number of containers. I also recommend you checkout a few other <a href="https://docs.docker.com/compose/overview/#common-use-cases">use-cases</a> of Docker compose. Hopefully I was able to show you how easy it is to manage multi-container environments with Compose. In the final section, we are going to deploy our app to AWS!</p>
 <p><a id="aws-ecs"></a></p>
 <h3 id="34-aws-elastic-container-service">3.4 AWS Elastic Container Service</h3>
-<p>In the last section we used <code>docker compose</code> to run our app locally with a single command - <code>docker-compose up</code>. Now that we have a functioning app we want to share this with the world, get some users, make tons of money and buy a big house in Miami. Executing the last three are beyond the scope of tutorial, so we'll spend our time instead on figuring out how we can deploy our multi-container apps on the cloud with AWS.</p>
+<p>In the last section we used <code>docker-compose</code> to run our app locally with a single command: <code>docker-compose up</code>. Now that we have a functioning app we want to share this with the world, get some users, make tons of money and buy a big house in Miami. Executing the last three are beyond the scope of tutorial, so we'll spend our time instead on figuring out how we can deploy our multi-container apps on the cloud with AWS.</p>
 <p>If you've read this far you are much pretty convinced that Docker is a pretty cool technology. And you are not alone. Seeing the meteoric rise of Docker, almost all Cloud vendors started working on adding support for deploying Docker apps on their platform. As of today, you can deploy Docker apps on AWS, <a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-docker-vm-extension/">Azure</a>, <a href="http://blog.rackspace.com/docker-with-the-rackspace-open-cloud/">Rackspace</a>, <a href="https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-docker-application">DigitalOcean</a> and many others. We already got a primer on deploying single container apps with Elastic Beanstalk and in this section we are going to look at <a href="https://aws.amazon.com/ecs/">Elastic Container Service (or ECS)</a> by AWS.</p>
 <p>AWS ECS is a scalable and super flexible container management service that supports Docker containers. It allows you to operate a Docker cluster on top of EC2 instances via an easy-to-use API. Where Beanstalk came with reasonable defaults, ECS allows you to completely tune your environment as per your needs. This makes ECS, in my opinion, quite complex to get started with.</p>
 <p>Luckily for us, ECS has a friendly <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html">CLI</a> tool that understands Docker Compose files and automatically provisions the cluster on ECS! Since we already have a functioning <code>docker-compose.yml</code> it should not take a lot of effort in getting up and running on AWS. So let's get started!</p>
@@ -1213,7 +1182,7 @@ ecs-cli version 0.1.0 (*cbdc2d5)
 INFO[0000] Saved ECS CLI configuration for cluster (foodtrucks)
 </code></pre>
 
-<p>We provide the <code>configure</code> command with the region name we want our cluster to reside in and a cluster name. Make sure you provide the <strong>same region name</strong> that you used when creating the keypair. If you've not configured the <a href="https://aws.amazon.com/cli/">AWS CLI</a> on your computer before, you will also need to provide an access key and a secret key.</p>
+<p>We provide the <code>configure</code> command with the region name we want our cluster to reside in and a cluster name. Make sure you provide the <strong>same region name</strong> that you used when creating the keypair. If you've not configured the <a href="https://aws.amazon.com/cli/">AWS CLI</a> on your computer before, you can use the official <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-set-up.html">guide</a>, which explains everything in great detail on how to get everything going.</p>
 <p>The next step enables the CLI to create a <a href="https://aws.amazon.com/cloudformation/">CloudFormation</a> template.</p>
 <pre><code>$ ecs-cli up --keypair ecs --capability-iam --size 2 --instance-type t2.micro
 INFO[0000] Created cluster                               cluster=foodtrucks
@@ -1241,7 +1210,7 @@ web:
     - es
 </code></pre>
 
-<p>The only changes we made from the original <code>docker-compose.yml</code> are of providing the <code>mem_limit</code> and <code>cpu_shares</code> values for each container. We also got rid of the <code>version</code> and the <code>services</code> key, since AWS doesn't yet support <a href="https://docs.docker.com/compose/compose-file/#version-2">version 2</a> of Compose file format. Since we our apps will run on <code>t2.micro</code> instances, we allocate 250mb of memory. Another thing we need to do before we move onto the next step is to publish our image on Docker Hub. As of this writing, ecs-cli <strong>does not</strong> support the <code>build</code> command - which is <a href="https://docs.docker.com/compose/compose-file/#build">supported</a> perfectly by Docker Compose.</p>
+<p>The only changes we made from the original <code>docker-compose.yml</code> are of providing the <code>mem_limit</code> and <code>cpu_shares</code> values for each container. We also got rid of the <code>version</code> and the <code>services</code> key, since AWS doesn't yet support <a href="https://docs.docker.com/compose/compose-file/#version-2">version 2</a> of Compose file format. Since our apps will run on <code>t2.micro</code> instances, we allocate 250mb of memory. Another thing we need to do before we move onto the next step is to publish our image on Docker Hub. As of this writing, ecs-cli <strong>does not</strong> support the <code>build</code> command - which is <a href="https://docs.docker.com/compose/compose-file/#build">supported</a> perfectly by Docker Compose.</p>
 <pre><code>$ docker push prakhar1989/foodtrucks-web
 </code></pre>
 
@@ -1281,7 +1250,7 @@ Since we're on the topic, let's see how our <a href="https://console.aws.amazon.
 <p>I hope that finishing this tutorial makes you more confident in your abilities to deal with servers. When you have an idea of building your next app, you can be sure that you'll be able to get it in front of people with minimal effort.</p>
 <p><a id="next-steps"></a></p>
 <h3 id="41-next-steps">4.1 Next Steps</h3>
-<p>Your journey into the container world has just started! My goal with this tutorial was to wet your appetite and show you the power of Docker. In the sea of new technology, it can be hard to navigate the waters alone and tutorials such as this one can provide a helping hand. This is the Docker tutorial I wish I had when I was starting out. Hopefully it served its purpose of getting you excited about containers so that you no longer have to watch the action from the sides.</p>
+<p>Your journey into the container world has just started! My goal with this tutorial was to whet your appetite and show you the power of Docker. In the sea of new technology, it can be hard to navigate the waters alone and tutorials such as this one can provide a helping hand. This is the Docker tutorial I wish I had when I was starting out. Hopefully it served its purpose of getting you excited about containers so that you no longer have to watch the action from the sides.</p>
 <p>Below are a few additional resources that will be beneficial. For your next project, I strongly encourage you to use Docker. Keep in mind - practice makes perfect!</p>
 <p><strong>Additional Resources</strong></p>
 <ul>
@@ -1297,7 +1266,7 @@ Since we're on the topic, let's see how our <a href="https://console.aws.amazon.
 <h3 id="42-give-feedback">4.2 Give Feedback</h3>
 <p>Now that the tutorial is over, it's my turn to ask questions. How did you like the tutorial? Did you find the tutorial to be a complete mess or did you have fun and learn something?</p>
 <p>Send in your thoughts directly to <a href="mailto:prakhar@prakhar.me">me</a> or just <a href="https://github.com/prakhar1989/docker-curriculum/issues/new">create an issue</a>. I'm on <a href="https://twitter.com/prakharsriv9">Twitter</a>, too, so if that's your deal, feel free to holler there!</p>
-<p>I would totally love to hear about your experience with this tutorial. Give suggestions on how to make this better or let me know about my mistakes. I want this tutorial to be one of the best introductory tutorials on the web and I cant do it without your help.</p>
+<p>I would totally love to hear about your experience with this tutorial. Give suggestions on how to make this better or let me know about my mistakes. I want this tutorial to be one of the best introductory tutorials on the web and I can't do it without your help.</p>
 <hr />
 <p><a href="#table-of-contents" class="top" id="preface">Top</a>
 <a id="references"></a></p>
@@ -1308,18 +1277,13 @@ Since we're on the topic, let's see how our <a href="https://console.aws.amazon.
 <li><a href="https://medium.com/@j_mcnally/a-beginner-s-guide-to-deploying-production-web-apps-to-docker-9458409c6180?_tmc=WrhaI1ejJlMmTpUmHOhTFZsYaUSPUP1yvyq19dsRQ5A#.bl50ga0uz">A beginner's guide to deploying production web apps</a></li>
 <li><a href="https://aggarwalarpit.wordpress.com/2015/12/06/running-web-application-in-linked-docker-containers-environment/">Running Web Application in Linked Docker Containers Environment</a></li>
 </ul>
-<!-- Asynchronous Google Analytics snippet -->
 <script>
-    var _gaq = _gaq || [];
-    var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
-    _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
-    _gaq.push(['_setAccount', 'UA-18504951-1']);
-    _gaq.push(['_trackPageview']);
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+  ga('create', 'UA-40692332-3', 'auto');
+  ga('send', 'pageview');
 </script>
 </body></html>
